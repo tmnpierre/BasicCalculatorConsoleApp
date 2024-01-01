@@ -11,28 +11,11 @@ namespace BasicCalculatorConsoleApp
             {
                 try
                 {
-                    double num1, num2;
-                    string input;
-                    char operation;
-
-                    Console.WriteLine("Enter the first number:");
-                    input = Console.ReadLine();
-                    while (!double.TryParse(input, out num1))
-                    {
-                        Console.WriteLine("Invalid input. Please enter a valid number:");
-                        input = Console.ReadLine();
-                    }
-
-                    Console.WriteLine("Enter the second number:");
-                    input = Console.ReadLine();
-                    while (!double.TryParse(input, out num2))
-                    {
-                        Console.WriteLine("Invalid input. Please enter a valid number:");
-                        input = Console.ReadLine();
-                    }
+                    double num1 = ReadDoubleFromConsole("Enter the first number:");
+                    double num2 = ReadDoubleFromConsole("Enter the second number:");
 
                     Console.WriteLine("Enter the operation (+, -, *, /):");
-                    operation = Console.ReadKey().KeyChar;
+                    char operation = Console.ReadKey().KeyChar;
                     Console.WriteLine();
 
                     double result;
@@ -68,6 +51,22 @@ namespace BasicCalculatorConsoleApp
                     Console.WriteLine($"An error occurred: {ex.Message}");
                 }
             }
+        }
+
+        static double ReadDoubleFromConsole(string prompt)
+        {
+            double number;
+            string input;
+            Console.WriteLine(prompt);
+            input = Console.ReadLine().Trim();
+
+            while (!double.TryParse(input, out number))
+            {
+                Console.WriteLine("Invalid input. Please enter a valid number:");
+                input = Console.ReadLine().Trim();
+            }
+
+            return number;
         }
 
         static double Add(double num1, double num2)
