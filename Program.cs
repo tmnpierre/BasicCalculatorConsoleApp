@@ -12,68 +12,89 @@ namespace BasicCalculatorConsoleApp
 
             while (keepRunning)
             {
-                try
-                {
-                    double num1, num2;
-                    Console.Write("Enter the operation (+, -, *, /, ^, sqrt, log): ");
-                    string operation = Console.ReadLine().Trim().ToLower();
+                Console.Write("Enter 'h' for history, 'help' for assistance, 'q' to quit, or a calculation: ");
+                string input = Console.ReadLine().Trim().ToLower();
 
-                    if (operation == "sqrt" || operation == "log")
-                    {
-                        Console.WriteLine("Enter the number:");
-                        num1 = ReadDoubleFromConsole();
-                        num2 = 0;
-                    }
-                    else
-                    {
-                        Console.WriteLine("Enter the first number:");
-                        num1 = ReadDoubleFromConsole();
-                        Console.WriteLine("Enter the second number:");
-                        num2 = ReadDoubleFromConsole();
-                    }
-
-                    double result = PerformAdvancedOperation(num1, num2, operation);
-                    history.Add($"{num1} {operation} {num2} = {result}");
-                    Console.ForegroundColor = ConsoleColor.Green;
-                    Console.WriteLine($"Result: {result}");
-                    Console.ResetColor();
-                }
-                catch (Exception ex)
-                {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine(ex.Message);
-                    Console.ResetColor();
-                }
-
-                Console.Write("Press 'h' to view history, 'q' to quit, or any other key to continue...");
-                char userInput = Console.ReadKey().KeyChar;
-                Console.WriteLine();
-                if (userInput == 'q')
+                if (input == "q")
                 {
                     keepRunning = false;
                 }
-                else if (userInput == 'h')
+                else if (input == "h")
                 {
-                    Console.ForegroundColor = ConsoleColor.Yellow;
-                    Console.WriteLine("\nCalculation History:");
-                    foreach (var entry in history)
-                    {
-                        Console.WriteLine(entry);
-                    }
-                    Console.ResetColor();
+                    DisplayHistory(history);
+                }
+                else if (input == "help")
+                {
+                    DisplayHelp();
+                }
+                else
+                {
+                    PerformCalculation(input, history);
                 }
             }
         }
 
-        static double ReadDoubleFromConsole()
+        static void DisplayHistory(List<string> history)
         {
-            while (true)
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("\nCalculation History:");
+            foreach (var entry in history)
             {
-                if (double.TryParse(Console.ReadLine().Trim(), out double number))
+                Console.WriteLine(entry);
+            }
+            Console.ResetColor();
+        }
+
+        static void DisplayHelp()
+        {
+            Console.WriteLine("\nHelp - How to use the calculator:");
+            Console.WriteLine("  - To perform calculations, enter the operation followed by numbers.");
+            Console.WriteLine("  - Supported operations: +, -, *, /, ^, sqrt, log.");
+            Console.WriteLine("  - Enter 'h' to view calculation history.");
+            Console.WriteLine("  - Enter 'q' to quit the application.\n");
+        }
+
+        static void PerformCalculation(string input, List<string> history)
+        {
+            double num1, num2;
+            string operation;
+
+            if (input == "sqrt" || input == "log")
+            {
+                Console.WriteLine("Enter the number:");
+                num1 = ReadDoubleFromConsole();
+                num2 = 0;
+                operation = input;
+            }
+            else
+            {
+                string[] parts = input.Split(' ');
+                if (parts.Length != 3)
                 {
-                    return number;
+                    Console.WriteLine("Invalid format. Use [number] [operation] [number].");
+                    return;
                 }
-                Console.WriteLine("Invalid input. Please enter a valid number.");
+                if (!double.TryParse(parts[0], out num1) || !double.TryParse(parts[2], out num2))
+                {
+                    Console.WriteLine("Invalid numbers. Please enter valid numbers.");
+                    return;
+                }
+                operation = parts[1];
+            }
+
+            try
+            {
+                double result = PerformAdvancedOperation(num1, num2, operation);
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine($"Result: {result}");
+                history.Add($"{num1} {operation} {num2} = {result}");
+                Console.ResetColor();
+            }
+            catch (Exception ex)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine(ex.Message);
+                Console.ResetColor();
             }
         }
 
@@ -90,6 +111,18 @@ namespace BasicCalculatorConsoleApp
                 "log" => Math.Log(num1),
                 _ => throw new InvalidOperationException("Unsupported operation."),
             };
+        }
+
+        static double ReadDoubleFromConsole()
+        {
+            while (true)
+            {
+                if (double.TryParse(Console.ReadLine().Trim(), out double number))
+                {
+                    return number;
+                }
+                Console.WriteLine("Invalid input. Please enter a valid number.");
+            }
         }
 
         static double Add(double num1, double num2) => num1 + num2;
