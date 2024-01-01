@@ -18,72 +18,59 @@ namespace BasicCalculatorConsoleApp
                     char operation = Console.ReadKey().KeyChar;
                     Console.WriteLine();
 
-                    double result;
-                    switch (operation)
-                    {
-                        case '+':
-                            result = Add(num1, num2);
-                            break;
-                        case '-':
-                            result = Subtract(num1, num2);
-                            break;
-                        case '*':
-                            result = Multiply(num1, num2);
-                            break;
-                        case '/':
-                            result = Divide(num1, num2);
-                            break;
-                        default:
-                            Console.WriteLine("Invalid operation.");
-                            continue;
-                    }
-
+                    double result = PerformOperation(num1, num2, operation);
                     Console.WriteLine($"Result: {result}");
-                    Console.WriteLine("Press 'q' to quit or any other key to continue...");
-                    if (Console.ReadKey().KeyChar == 'q')
-                    {
-                        keepRunning = false;
-                    }
-                    Console.WriteLine();
+                }
+                catch (FormatException)
+                {
+                    Console.WriteLine("Invalid number format. Please enter valid numbers.");
+                }
+                catch (InvalidOperationException ex)
+                {
+                    Console.WriteLine($"Invalid operation: {ex.Message}");
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"An error occurred: {ex.Message}");
+                    Console.WriteLine($"An unexpected error occurred: {ex.Message}");
                 }
+
+                Console.WriteLine("Press 'q' to quit or any other key to continue...");
+                if (Console.ReadKey().KeyChar == 'q')
+                {
+                    keepRunning = false;
+                }
+                Console.WriteLine();
             }
         }
 
         static double ReadDoubleFromConsole(string prompt)
         {
-            double number;
-            string input;
-            Console.WriteLine(prompt);
-            input = Console.ReadLine().Trim();
-
-            while (!double.TryParse(input, out number))
+            while (true)
             {
-                Console.WriteLine("Invalid input. Please enter a valid number:");
-                input = Console.ReadLine().Trim();
+                Console.WriteLine(prompt);
+                if (double.TryParse(Console.ReadLine().Trim(), out double number))
+                {
+                    return number;
+                }
+                Console.WriteLine("Invalid input. Please enter a valid number.");
             }
-
-            return number;
         }
 
-        static double Add(double num1, double num2)
+        static double PerformOperation(double num1, double num2, char operation)
         {
-            return num1 + num2;
+            return operation switch
+            {
+                '+' => Add(num1, num2),
+                '-' => Subtract(num1, num2),
+                '*' => Multiply(num1, num2),
+                '/' => Divide(num1, num2),
+                _ => throw new InvalidOperationException("Unsupported operation."),
+            };
         }
 
-        static double Subtract(double num1, double num2)
-        {
-            return num1 - num2;
-        }
-
-        static double Multiply(double num1, double num2)
-        {
-            return num1 * num2;
-        }
-
+        static double Add(double num1, double num2) => num1 + num2;
+        static double Subtract(double num1, double num2) => num1 - num2;
+        static double Multiply(double num1, double num2) => num1 * num2;
         static double Divide(double num1, double num2)
         {
             if (num2 == 0)
