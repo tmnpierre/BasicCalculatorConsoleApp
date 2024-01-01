@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace BasicCalculatorConsoleApp
 {
@@ -6,7 +7,9 @@ namespace BasicCalculatorConsoleApp
     {
         static void Main(string[] args)
         {
+            List<string> history = new List<string>();
             bool keepRunning = true;
+
             while (keepRunning)
             {
                 try
@@ -19,7 +22,7 @@ namespace BasicCalculatorConsoleApp
                     {
                         Console.WriteLine("Enter the number:");
                         num1 = ReadDoubleFromConsole();
-                        num2 = 0; // Not used for these operations
+                        num2 = 0;
                     }
                     else
                     {
@@ -30,6 +33,7 @@ namespace BasicCalculatorConsoleApp
                     }
 
                     double result = PerformAdvancedOperation(num1, num2, operation);
+                    history.Add($"{num1} {operation} {num2} = {result}");
                     Console.ForegroundColor = ConsoleColor.Green;
                     Console.WriteLine($"Result: {result}");
                     Console.ResetColor();
@@ -41,12 +45,23 @@ namespace BasicCalculatorConsoleApp
                     Console.ResetColor();
                 }
 
-                Console.Write("Press 'q' to quit or any other key to continue...");
-                if (Console.ReadKey().KeyChar == 'q')
+                Console.Write("Press 'h' to view history, 'q' to quit, or any other key to continue...");
+                char userInput = Console.ReadKey().KeyChar;
+                Console.WriteLine();
+                if (userInput == 'q')
                 {
                     keepRunning = false;
                 }
-                Console.WriteLine();
+                else if (userInput == 'h')
+                {
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.WriteLine("\nCalculation History:");
+                    foreach (var entry in history)
+                    {
+                        Console.WriteLine(entry);
+                    }
+                    Console.ResetColor();
+                }
             }
         }
 
