@@ -11,34 +11,33 @@ namespace BasicCalculatorConsoleApp
             {
                 try
                 {
-                    double num1 = ReadDoubleFromConsole("Enter the first number:");
-                    double num2 = ReadDoubleFromConsole("Enter the second number:");
+                    double num1, num2;
+                    Console.Write("Enter the operation (+, -, *, /, ^, sqrt, log): ");
+                    string operation = Console.ReadLine().Trim().ToLower();
 
-                    Console.Write("Enter the operation (+, -, *, /): ");
-                    char operation = Console.ReadKey().KeyChar;
-                    Console.WriteLine();
+                    if (operation == "sqrt" || operation == "log")
+                    {
+                        Console.WriteLine("Enter the number:");
+                        num1 = ReadDoubleFromConsole();
+                        num2 = 0; // Not used for these operations
+                    }
+                    else
+                    {
+                        Console.WriteLine("Enter the first number:");
+                        num1 = ReadDoubleFromConsole();
+                        Console.WriteLine("Enter the second number:");
+                        num2 = ReadDoubleFromConsole();
+                    }
 
-                    double result = PerformOperation(num1, num2, operation);
+                    double result = PerformAdvancedOperation(num1, num2, operation);
                     Console.ForegroundColor = ConsoleColor.Green;
                     Console.WriteLine($"Result: {result}");
-                    Console.ResetColor();
-                }
-                catch (FormatException)
-                {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("Invalid number format. Please enter valid numbers.");
-                    Console.ResetColor();
-                }
-                catch (InvalidOperationException ex)
-                {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine($"Invalid operation: {ex.Message}");
                     Console.ResetColor();
                 }
                 catch (Exception ex)
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine($"An unexpected error occurred: {ex.Message}");
+                    Console.WriteLine(ex.Message);
                     Console.ResetColor();
                 }
 
@@ -51,11 +50,10 @@ namespace BasicCalculatorConsoleApp
             }
         }
 
-        static double ReadDoubleFromConsole(string prompt)
+        static double ReadDoubleFromConsole()
         {
             while (true)
             {
-                Console.WriteLine(prompt);
                 if (double.TryParse(Console.ReadLine().Trim(), out double number))
                 {
                     return number;
@@ -64,14 +62,17 @@ namespace BasicCalculatorConsoleApp
             }
         }
 
-        static double PerformOperation(double num1, double num2, char operation)
+        static double PerformAdvancedOperation(double num1, double num2, string operation)
         {
             return operation switch
             {
-                '+' => Add(num1, num2),
-                '-' => Subtract(num1, num2),
-                '*' => Multiply(num1, num2),
-                '/' => Divide(num1, num2),
+                "+" => Add(num1, num2),
+                "-" => Subtract(num1, num2),
+                "*" => Multiply(num1, num2),
+                "/" => Divide(num1, num2),
+                "^" => Math.Pow(num1, num2),
+                "sqrt" => Math.Sqrt(num1),
+                "log" => Math.Log(num1),
                 _ => throw new InvalidOperationException("Unsupported operation."),
             };
         }
