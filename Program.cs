@@ -6,57 +6,67 @@ namespace BasicCalculatorConsoleApp
     {
         static void Main(string[] args)
         {
-            try
+            bool keepRunning = true;
+            while (keepRunning)
             {
-                double num1, num2;
-                string input;
-                char operation;
-
-                Console.WriteLine("Enter the first number:");
-                input = Console.ReadLine();
-                while (!double.TryParse(input, out num1))
+                try
                 {
-                    Console.WriteLine("Invalid input. Please enter a valid number:");
+                    double num1, num2;
+                    string input;
+                    char operation;
+
+                    Console.WriteLine("Enter the first number:");
                     input = Console.ReadLine();
-                }
+                    while (!double.TryParse(input, out num1))
+                    {
+                        Console.WriteLine("Invalid input. Please enter a valid number:");
+                        input = Console.ReadLine();
+                    }
 
-                Console.WriteLine("Enter the second number:");
-                input = Console.ReadLine();
-                while (!double.TryParse(input, out num2))
-                {
-                    Console.WriteLine("Invalid input. Please enter a valid number:");
+                    Console.WriteLine("Enter the second number:");
                     input = Console.ReadLine();
+                    while (!double.TryParse(input, out num2))
+                    {
+                        Console.WriteLine("Invalid input. Please enter a valid number:");
+                        input = Console.ReadLine();
+                    }
+
+                    Console.WriteLine("Enter the operation (+, -, *, /):");
+                    operation = Console.ReadKey().KeyChar;
+                    Console.WriteLine();
+
+                    double result;
+                    switch (operation)
+                    {
+                        case '+':
+                            result = Add(num1, num2);
+                            break;
+                        case '-':
+                            result = Subtract(num1, num2);
+                            break;
+                        case '*':
+                            result = Multiply(num1, num2);
+                            break;
+                        case '/':
+                            result = Divide(num1, num2);
+                            break;
+                        default:
+                            Console.WriteLine("Invalid operation.");
+                            continue;
+                    }
+
+                    Console.WriteLine($"Result: {result}");
+                    Console.WriteLine("Press 'q' to quit or any other key to continue...");
+                    if (Console.ReadKey().KeyChar == 'q')
+                    {
+                        keepRunning = false;
+                    }
+                    Console.WriteLine();
                 }
-
-                Console.WriteLine("Enter the operation (+, -, *, /):");
-                operation = Console.ReadKey().KeyChar;
-                Console.WriteLine();
-
-                double result;
-                switch (operation)
+                catch (Exception ex)
                 {
-                    case '+':
-                        result = Add(num1, num2);
-                        break;
-                    case '-':
-                        result = Subtract(num1, num2);
-                        break;
-                    case '*':
-                        result = Multiply(num1, num2);
-                        break;
-                    case '/':
-                        result = Divide(num1, num2);
-                        break;
-                    default:
-                        Console.WriteLine("Invalid operation.");
-                        return;
+                    Console.WriteLine($"An error occurred: {ex.Message}");
                 }
-
-                Console.WriteLine($"Result: {result}");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"An error occurred: {ex.Message}");
             }
         }
 
