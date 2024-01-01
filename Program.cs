@@ -14,27 +14,35 @@ namespace BasicCalculatorConsoleApp
                     double num1 = ReadDoubleFromConsole("Enter the first number:");
                     double num2 = ReadDoubleFromConsole("Enter the second number:");
 
-                    Console.WriteLine("Enter the operation (+, -, *, /):");
+                    Console.Write("Enter the operation (+, -, *, /): ");
                     char operation = Console.ReadKey().KeyChar;
                     Console.WriteLine();
 
                     double result = PerformOperation(num1, num2, operation);
+                    Console.ForegroundColor = ConsoleColor.Green;
                     Console.WriteLine($"Result: {result}");
+                    Console.ResetColor();
                 }
                 catch (FormatException)
                 {
+                    Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine("Invalid number format. Please enter valid numbers.");
+                    Console.ResetColor();
                 }
                 catch (InvalidOperationException ex)
                 {
+                    Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine($"Invalid operation: {ex.Message}");
+                    Console.ResetColor();
                 }
                 catch (Exception ex)
                 {
+                    Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine($"An unexpected error occurred: {ex.Message}");
+                    Console.ResetColor();
                 }
 
-                Console.WriteLine("Press 'q' to quit or any other key to continue...");
+                Console.Write("Press 'q' to quit or any other key to continue...");
                 if (Console.ReadKey().KeyChar == 'q')
                 {
                     keepRunning = false;
