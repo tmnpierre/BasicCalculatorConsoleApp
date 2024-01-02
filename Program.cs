@@ -49,15 +49,28 @@ namespace BasicCalculatorConsoleApp
 
         static void PerformCalculationMenu(List<string> history)
         {
-            Console.Clear();
-            Console.WriteLine("Enter your calculation (or 'back' to return to main menu):");
-            string input = Console.ReadLine().Trim().ToLower();
-
-            if (input != "back")
+            while (true)
             {
+                Console.Clear();
+                Console.WriteLine("Enter your calculation (or 'back' to return to main menu):");
+                string input = Console.ReadLine().Trim().ToLower();
+
+                if (input == "back")
+                {
+                    break;
+                }
+
                 PerformCalculation(input, history);
+
+                Console.WriteLine("Press any key to continue or type 'back' to return to the main menu.");
+                input = Console.ReadLine().Trim().ToLower();
+                if (input == "back")
+                {
+                    break;
+                }
             }
         }
+
 
         static void DisplayHistory(List<string> history)
         {
