@@ -22,7 +22,7 @@ namespace BasicCalculatorConsoleApp
                         PerformCalculationMenu(history);
                         break;
                     case 2:
-                        DisplayHistory(history);
+                        DisplayHistoryMenu(history);
                         break;
                     case 3:
                         DisplayHelp();
@@ -71,16 +71,24 @@ namespace BasicCalculatorConsoleApp
             }
         }
 
-
-        static void DisplayHistory(List<string> history)
+        static void DisplayHistoryMenu(List<string> history)
         {
-            Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine("\nCalculation History:");
-            foreach (var entry in history)
+            while (true)
             {
-                Console.WriteLine(entry);
+                Console.Clear();
+                Console.WriteLine("Calculation History (type 'back' to return to the main menu):");
+                foreach (var entry in history)
+                {
+                    Console.WriteLine(entry);
+                }
+
+                Console.WriteLine("\nPress any key to refresh or type 'back' to return to the main menu.");
+                string input = Console.ReadLine().Trim().ToLower();
+                if (input == "back")
+                {
+                    break;
+                }
             }
-            Console.ResetColor();
         }
 
         static void DisplayHelp()
