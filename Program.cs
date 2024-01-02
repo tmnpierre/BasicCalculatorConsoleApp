@@ -25,7 +25,7 @@ namespace BasicCalculatorConsoleApp
                         DisplayHistoryMenu(history);
                         break;
                     case 3:
-                        DisplayHelp();
+                        DisplayHelpMenu();
                         break;
                     case 4:
                         keepRunning = false;
@@ -91,13 +91,23 @@ namespace BasicCalculatorConsoleApp
             }
         }
 
-        static void DisplayHelp()
+        static void DisplayHelpMenu()
         {
-            Console.WriteLine("\nHelp - How to use the calculator:");
-            Console.WriteLine("  - To perform calculations, enter the operation followed by numbers.");
-            Console.WriteLine("  - Supported operations: +, -, *, /, ^, sqrt, log.");
-            Console.WriteLine("  - Enter 'h' to view calculation history.");
-            Console.WriteLine("  - Enter 'q' to quit the application.\n");
+            while (true)
+            {
+                Console.Clear();
+                Console.WriteLine("Help - How to use the calculator (type 'back' to return to the main menu):");
+                Console.WriteLine("  - To perform calculations, enter the operation followed by numbers.");
+                Console.WriteLine("  - Supported operations: +, -, *, /, ^, sqrt, log.");
+                Console.WriteLine("  - Enter 'back' at any point to return to the main menu.");
+
+                Console.WriteLine("\nPress any key to refresh or type 'back' to return to the main menu.");
+                string input = Console.ReadLine().Trim().ToLower();
+                if (input == "back")
+                {
+                    break;
+                }
+            }
         }
 
         static void PerformCalculation(string input, List<string> history)
