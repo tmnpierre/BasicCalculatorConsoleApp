@@ -12,25 +12,50 @@ namespace BasicCalculatorConsoleApp
 
             while (keepRunning)
             {
-                Console.Write("Enter 'h' for history, 'help' for assistance, 'q' to quit, or a calculation: ");
-                string input = Console.ReadLine().Trim().ToLower();
+                Console.Clear();
+                ShowMainMenu();
+                int choice = ReadIntFromConsole();
 
-                if (input == "q")
+                switch (choice)
                 {
-                    keepRunning = false;
+                    case 1:
+                        PerformCalculationMenu(history);
+                        break;
+                    case 2:
+                        DisplayHistory(history);
+                        break;
+                    case 3:
+                        DisplayHelp();
+                        break;
+                    case 4:
+                        keepRunning = false;
+                        break;
+                    default:
+                        Console.WriteLine("Invalid choice. Please select a valid option.");
+                        break;
                 }
-                else if (input == "h")
-                {
-                    DisplayHistory(history);
-                }
-                else if (input == "help")
-                {
-                    DisplayHelp();
-                }
-                else
-                {
-                    PerformCalculation(input, history);
-                }
+            }
+        }
+
+        static void ShowMainMenu()
+        {
+            Console.WriteLine("Main Menu:");
+            Console.WriteLine("1. Perform Calculation");
+            Console.WriteLine("2. View History");
+            Console.WriteLine("3. Help");
+            Console.WriteLine("4. Quit");
+            Console.WriteLine("Enter your choice (1-4):");
+        }
+
+        static void PerformCalculationMenu(List<string> history)
+        {
+            Console.Clear();
+            Console.WriteLine("Enter your calculation (or 'back' to return to main menu):");
+            string input = Console.ReadLine().Trim().ToLower();
+
+            if (input != "back")
+            {
+                PerformCalculation(input, history);
             }
         }
 
@@ -118,6 +143,18 @@ namespace BasicCalculatorConsoleApp
             while (true)
             {
                 if (double.TryParse(Console.ReadLine().Trim(), out double number))
+                {
+                    return number;
+                }
+                Console.WriteLine("Invalid input. Please enter a valid number.");
+            }
+        }
+
+        static int ReadIntFromConsole()
+        {
+            while (true)
+            {
+                if (int.TryParse(Console.ReadLine().Trim(), out int number))
                 {
                     return number;
                 }
