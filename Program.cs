@@ -12,46 +12,102 @@ namespace BasicCalculatorConsoleApp
 
             while (keepRunning)
             {
-                Console.Write("Enter 'h' for history, 'help' for assistance, 'q' to quit, or a calculation: ");
+                Console.Clear();
+                ShowMainMenu();
+                int choice = ReadIntFromConsole();
+
+                switch (choice)
+                {
+                    case 1:
+                        PerformCalculationMenu(history);
+                        break;
+                    case 2:
+                        DisplayHistoryMenu(history);
+                        break;
+                    case 3:
+                        DisplayHelpMenu();
+                        break;
+                    case 4:
+                        keepRunning = false;
+                        break;
+                    default:
+                        Console.WriteLine("Invalid choice. Please select a valid option.");
+                        break;
+                }
+            }
+        }
+
+        static void ShowMainMenu()
+        {
+            Console.WriteLine("Main Menu:");
+            Console.WriteLine("1. Perform Calculation");
+            Console.WriteLine("2. View History");
+            Console.WriteLine("3. Help");
+            Console.WriteLine("4. Quit");
+            Console.WriteLine("Enter your choice (1-4):");
+        }
+
+        static void PerformCalculationMenu(List<string> history)
+        {
+            while (true)
+            {
+                Console.Clear();
+                Console.WriteLine("Enter your calculation (or 'back' to return to main menu):");
                 string input = Console.ReadLine().Trim().ToLower();
 
-                if (input == "q")
+                if (input == "back")
                 {
-                    keepRunning = false;
+                    break;
                 }
-                else if (input == "h")
+
+                PerformCalculation(input, history);
+
+                Console.WriteLine("Press any key to continue or type 'back' to return to the main menu.");
+                input = Console.ReadLine().Trim().ToLower();
+                if (input == "back")
                 {
-                    DisplayHistory(history);
-                }
-                else if (input == "help")
-                {
-                    DisplayHelp();
-                }
-                else
-                {
-                    PerformCalculation(input, history);
+                    break;
                 }
             }
         }
 
-        static void DisplayHistory(List<string> history)
+        static void DisplayHistoryMenu(List<string> history)
         {
-            Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine("\nCalculation History:");
-            foreach (var entry in history)
+            while (true)
             {
-                Console.WriteLine(entry);
+                Console.Clear();
+                Console.WriteLine("Calculation History (type 'back' to return to the main menu):");
+                foreach (var entry in history)
+                {
+                    Console.WriteLine(entry);
+                }
+
+                Console.WriteLine("\nPress any key to refresh or type 'back' to return to the main menu.");
+                string input = Console.ReadLine().Trim().ToLower();
+                if (input == "back")
+                {
+                    break;
+                }
             }
-            Console.ResetColor();
         }
 
-        static void DisplayHelp()
+        static void DisplayHelpMenu()
         {
-            Console.WriteLine("\nHelp - How to use the calculator:");
-            Console.WriteLine("  - To perform calculations, enter the operation followed by numbers.");
-            Console.WriteLine("  - Supported operations: +, -, *, /, ^, sqrt, log.");
-            Console.WriteLine("  - Enter 'h' to view calculation history.");
-            Console.WriteLine("  - Enter 'q' to quit the application.\n");
+            while (true)
+            {
+                Console.Clear();
+                Console.WriteLine("Help - How to use the calculator (type 'back' to return to the main menu):");
+                Console.WriteLine("  - To perform calculations, enter the operation followed by numbers.");
+                Console.WriteLine("  - Supported operations: +, -, *, /, ^, sqrt, log.");
+                Console.WriteLine("  - Enter 'back' at any point to return to the main menu.");
+
+                Console.WriteLine("\nPress any key to refresh or type 'back' to return to the main menu.");
+                string input = Console.ReadLine().Trim().ToLower();
+                if (input == "back")
+                {
+                    break;
+                }
+            }
         }
 
         static void PerformCalculation(string input, List<string> history)
@@ -118,6 +174,18 @@ namespace BasicCalculatorConsoleApp
             while (true)
             {
                 if (double.TryParse(Console.ReadLine().Trim(), out double number))
+                {
+                    return number;
+                }
+                Console.WriteLine("Invalid input. Please enter a valid number.");
+            }
+        }
+
+        static int ReadIntFromConsole()
+        {
+            while (true)
+            {
+                if (int.TryParse(Console.ReadLine().Trim(), out int number))
                 {
                     return number;
                 }
